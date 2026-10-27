@@ -1,36 +1,48 @@
-# Discord İstatistik Botu
+# Discord İstatistik Botu (StatsBot Lite)
 
-## Nasıl Kullanılır
+YouTube istatistiklerini (abone, izlenme, son video) ve sunucu üye sayısını ses kanalında ve bot durumunda (presence) gösteren hafif Discord botu.
 
-1. `TOKEN`, `YOUTUBE_CHANNEL_ID`, `YOUTUBE_API_KEY` ve `VOICE_CHANNEL_ID` değişkenlerini `.env` dosyasında ayarlayın. Örnek `.env.example` dosyası verilmiştir.
-
-2. Botu çalıştırmak için aşağıdaki komutları kullanın:
-
-```
-pip install -r requirements.txt
-
-python bot.py
-```
 ## Özellikler
 
-- YouTube kanalının abone sayısını ve toplam görüntülenme sayısını takip eder.
-- En son yayınlanan video başlığını Discord aktiviteleri aracılığıyla gösterir.
-- Belirli aralıklarla abone sayısını ve toplam görüntülenme sayısını günceller.
+- **Asenkron Altyapı:** `aiohttp` ile asenkron istekler (bot donmaz veya gateway kopmaları yaşamaz).
+- **Optimize YouTube API:** `search` yerine kanalın `Uploads` oynatma listesi kullanılır, kota tüketimi %99 düşürülmüştür.
+- **Ratelimit Koruması:** Abone sayısı değişmediği sürece kanal adı düzenleme isteği atılmaz.
+- **Döngüsel Durum (Presence):** Belirlenen aralıklarla üye sayısı, YouTube izlenmesi, abone sayısı ve son video başlığı sırayla gösterilir.
+
+## Kurulum
+
+1. Bağımlılıkları yükleyin:
+
+```bash
+pip install -r requirements.txt
 ```
 
-              
+2. `.env.example` dosyasını `.env` olarak kopyalayın ve bilgilerinizi girin:
 
-
+```bash
+cp .env.example .env
 ```
-# Bilgilendirmeler
 
-## Sınırlandırma
-Discord tarafından ratelimit hatasıyla karşılaşabilirsiniz ayarladığınız sürelere dikkat edin.
+3. Botu başlatın:
+
+```bash
+python main.py
+```
+*(veya `python bot.py`)*
+
+## Yapılandırma Seçenekleri (.env)
+
+- `TOKEN`: Discord Bot Token
+- `VOICE_CHANNEL_ID`: İstatistiğin yazılacağı ses kanalı ID'si
+- `YOUTUBE_API_KEY`: YouTube Data API v3 anahtarı
+- `YOUTUBE_CHANNEL_ID`: Takip edilecek YouTube kanalının ID'si
+- `CHANNEL_UPDATE_INTERVAL`: Kanal adının güncellenme aralığı (saniye, min 300)
+- `PRESENCE_INTERVAL`: Durum mesajının geçiş süresi (saniye, min 15)
+- `STATS_CACHE_TTL`: YouTube verisinin önbellek süresi (saniye)
+- `COMPACT_NUMBERS`: Sayıları `1.5M`, `12.5K` şeklinde gösterme (`true`/`false`)
+- `VOICE_CONNECT`: Botun ses kanalına katılıp kalması (`true`/`false`)
+- `VOICE_CHANNEL_TEMPLATE`: Kanal adı şablonu (Örn: `YouTube: {subscribers} ♥`)
 
 ## Lisans
 
-Bu proje MIT Lisansı altında lisanslanmıştır. Daha fazla bilgi için [LICENSE](LICENSE) dosyasını inceleyin.
-
-## Hata, Sorun, Geliştirme 
-
-[Discord](https://discord.gg/A8eeGzXgME) üzerinden benimle iletişime geçebilirsiniz <3 
+[MIT](LICENSE)
